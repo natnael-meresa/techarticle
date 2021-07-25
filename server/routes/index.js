@@ -1,7 +1,7 @@
 const express = require("express")
 const router = express.Router()
 const API = require('../controllers/api')
-const multer = require('multer')
+// const multer = require('multer')
 const Post = require('../src/models/Article')
 
 
@@ -17,7 +17,8 @@ const Post = require('../src/models/Article')
 // let upload = multer({
 //     storage: storage,
 // }).single('image')
-
+router.post('/login', API.login)
+router.post('/register', API.register)
 router.get('/',API.fetchAllArticle)
 router.get('/:id',API.fetchArticleByID)
 router.post('/', API.createArticle)
