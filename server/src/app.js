@@ -2,7 +2,10 @@ const express = require('express')
 const mongoose = require('mongoose')
 const cors = require('cors')
 const morgan = require('morgan')
+const session = require('express-session');
+const MongoStore = require('connect-mongo')
 
+const passport = require('../config/passport')
 
 const app = express()
 app.use(express.json());
@@ -22,6 +25,15 @@ app.post('/register', (req,res) => {
         message: `Hello ${req.body.email}! welcome`
     });
 });
+app.use(session({
+      secret: "very secret",
+      resave: false,
+      saveUninitialized: true,
+      store: MongoStore.create({  mongoUrl:'mongodb://localhost:27017/techarticle_db' })
+    })
+);
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.use("/api", require("../routes/index"))
 
