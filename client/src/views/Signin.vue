@@ -5,11 +5,11 @@
             <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
 
             <div class="form-floating">
-            <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
+            <input type="email" v-model="user.email" class="form-control" id="email" name="email" placeholder="email">
             <label for="floatingInput">Email address</label>
             </div>
             <div class="form-floating">
-            <input type="password" class="form-control" id="floatingPassword" placeholder="Password">
+            <input type="password" v-model="user.password" class="form-control" id="password" name="password" placeholder="Password">
             <label for="floatingPassword">Password</label>
             </div>
 
@@ -18,10 +18,38 @@
                 <input type="checkbox" value="remember-me"> Remember me
             </label>
             </div>
-            <button class="w-100 btn btn-lg btn-primary" type="submit">Sign in</button>
+            <button class="w-100 btn btn-lg btn-primary" v-on:click="Login" type="submit">Sign in</button>
         </form>
     </main>
 </template>
+
+<script>
+import ArticleService from '@/services/Auth'
+
+export default {
+    data(){
+        return {
+            user: {
+                email:undefined,
+                password:null,
+            },
+            repns:null
+        }
+    },
+        methods: {
+        Login(){
+            console.log(this.user)
+            ArticleService.Login(this.user)
+            .then(response => {
+                this.repns = response.data
+            })
+            .catch(error => {
+                console.log(error)
+            })
+        }
+    }
+}
+</script>
 
 <style scoped>
     .form-signin {
