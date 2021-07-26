@@ -1,9 +1,14 @@
 <template>
     <main class="form-signin">
-        <form>
+
+        <form @submit.prevent="onSubmit(email, password)">
             <img class="mb-4" src="/techarticlelogo.png" alt="" width="170" height="57">
             <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
-
+            <div v-if="errors && errors.length">
+                <div class="alert alert-warning" role="alert" v-for="(error, index) in errors" v-bind:key='index'>
+                    {{error}}
+                </div>
+            </div>
             <div class="form-floating">
             <input type="email" v-model="user.email" class="form-control" id="email" name="email" placeholder="email">
             <label for="floatingInput">Email address</label>
@@ -24,7 +29,12 @@
 </template>
 
 <script>
-import ArticleService from '@/services/Auth'
+// import ArticleService from '@/services/Auth'
+import axios from 'axios'
+
+
+let apiURl = 'http://localhost:8081/api/login'
+
 
 export default {
     data(){
@@ -33,19 +43,32 @@ export default {
                 email:undefined,
                 password:null,
             },
-            repns:null
+            repns:null,
+            errors: []
         }
     },
         methods: {
         Login(){
-            console.log(this.user)
-            ArticleService.Login(this.user)
-            .then(response => {
-                this.repns = response.data
-            })
-            .catch(error => {
-                console.log(error)
-            })
+            // console.log(this.user)
+            // ArticleService.Login(this.user)
+            // .then(response => {
+            //     this.repns = response.data
+            //     console.log(`this response ${response}`)
+            // })
+            // .catch(error => {
+            //     console.log(error)
+            //     this.errors.push(error)
+            //     console.log(`this error ${error}`)
+            // })
+            axios.post(apiURl, this.user).then(() => {
+                this.$router.push({
+                name: 'Home'
+                })
+            }).catch(error => {
+                this.errors = []
+                this.errors.push(error.response.data.msg)
+                this.$forceUpdate();
+            });
         }
     }
 }
