@@ -12,8 +12,9 @@ export default {
             console.log('registered')
             alert('loged in')
         }).catch(error => {
-            console.log(error)
-            alert(error)
+            console.log(error.response)
+            alert(`erro:${error.response.data.msg}, and the response: `)
+            return(error.response.data.msg)
         });
     }
 }
