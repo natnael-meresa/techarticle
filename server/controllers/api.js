@@ -15,12 +15,13 @@ module.exports = class API {
 
     static async login(req,res, next) {
         console.log('hit /login')
-        passport.authenticate("local", function(err, user, info) {
-            console.log( info )
+        passport.authenticate("local", function(info, user, err) {
+            console.log( info)
             if (err) {
                 console.log(err)
                 console.log('hit err 1')
-                return res.status(400).json({ errors:err });
+                // return res.status(400).json({ errors:info });
+                return res.status(400).send({success: false, msg: err.message});
             }
 
             if (!user) {
@@ -31,7 +32,8 @@ module.exports = class API {
             req.logIn(user, function(err) {
                 console.log('hot')
                 if (err) {
-                    return res.status(400).json({errors: err});
+                    // return res.status(400).json({errors: info});
+                    res.status(401).send({success: false, msg: 'Authentication failed. Wrong password.'});
                     console.log('hit err 3')
                 }
                 console.log('hit success')
