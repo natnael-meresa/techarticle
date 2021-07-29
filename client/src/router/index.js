@@ -24,6 +24,28 @@ const routes = [
     component: Signin
   },
   {
+    name: "settings",
+    path: "/settings",
+    component: () => import("@/views/Settings")
+  },
+  {
+    // path: "/@:username",
+    path:"/username",
+    component: () => import("@/views/Profile"),
+    children: [
+      {
+        path: "",
+        name: "profile",
+        component: () => import("@/views/ProfileArticles")
+      },
+      {
+        name: "profile-favorites",
+        path: "favorites",
+        component: () => import("@/views/ProfileFavorited")
+      }
+    ]
+  },
+  {
     path: '/register',
     name: 'register',
     component: Register
@@ -32,6 +54,12 @@ const routes = [
     path: '/articles',
     name: 'articles',
     component: Article,
+  },
+  {
+    name: "article-edit",
+    path: "/editor/:slug?",
+    props: true,
+    component: () => import("@/views/ArticleEdit")
   }
 ]
 
