@@ -23,5 +23,8 @@ export default {
         }).catch(error => {
             console.log(error)
         });
+    },
+    editArtiles(id) {
+        print(id)
     }
 }
