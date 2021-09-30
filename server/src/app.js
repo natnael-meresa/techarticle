@@ -6,6 +6,7 @@ const session = require('express-session');
 const MongoStore = require('connect-mongo')
 
 const passport = require('../config/passport')
+const AuthController = require('../controllers/AuthController');
 
 const app = express()
 app.use(express.json());
@@ -35,6 +36,7 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
+app.use('/api/auth', AuthController)
 app.use("/api", require("../routes/index"))
 
 
