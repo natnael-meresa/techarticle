@@ -1,7 +1,7 @@
 <template>
     <main class="form-signin">
 
-        <form @submit.prevent="onSubmit(email, password)">
+        <form  @submit.prevent="Login" 
             <img class="mb-4" src="/techarticlelogo.png" alt="" width="170" height="57">
             <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
             <div v-if="errors && errors.length">
@@ -9,11 +9,11 @@
                     {{error}}
                 </div>
             </div>
-            <div class="form-floating">
+            <div class="form-floating pb-2">
             <input type="email" v-model="user.email" class="form-control" id="email" name="email" placeholder="email">
             <label for="floatingInput">Email address</label>
             </div>
-            <div class="form-floating">
+            <div class="form-floating pb-2">
             <input type="password" v-model="user.password" class="form-control" id="password" name="password" placeholder="Password">
             <label for="floatingPassword">Password</label>
             </div>
@@ -23,17 +23,14 @@
                 <input type="checkbox" value="remember-me"> Remember me
             </label>
             </div>
-            <button class="w-100 btn btn-lg btn-primary" v-on:click="Login" type="submit">Sign in</button>
+            <button class="w-100 btn btn-lg btn-primary"  type="submit">Sign in</button>
         </form>
     </main>
 </template>
 
 <script>
 // import ArticleService from '@/services/Auth'
-import axios from 'axios'
-
-
-let apiURl = 'http://localhost:8081/api/login'
+// import axios from 'axios'
 
 
 export default {
@@ -60,15 +57,32 @@ export default {
             //     this.errors.push(error)
             //     console.log(`this error ${error}`)
             // })
-            axios.post(apiURl, this.user).then(() => {
-                this.$router.push({
-                name: 'Home'
+
+             this.$store
+                .dispatch("login", {
+                  email: this.user.email,
+                  password: this.user.password,
                 })
-            }).catch(error => {
-                this.errors = []
-                this.errors.push(error.response.data.msg)
-                this.$forceUpdate();
-            });
+                .then(() => {
+                    console.log('success')
+                    this.$router.push({
+                      name: 'Home'
+                    })
+                  // if (this.userRole == Role.Freelancer) {
+                  //   this.$router.push({ name: "Onboarding" });
+                  // } else if (this.userRole == Role.Employer) {
+                  //   this.$router.push({ name: "Home" });
+                  // }
+                  // this.$router.push({ name: 'dashboard' })
+                })
+                .catch(err => {
+                  console.log(`Etyrror: ${err.response.data}`);
+                  this.errors = []
+                  this.errors.push(err.response.data)
+                  // console.log(`Error message: ${err.response.data.error.message}`);
+                  // console.log(`Error: ${err.response.data.error}`);
+                  // this.error = err.response.data.error;
+                });
         }
     }
 }
