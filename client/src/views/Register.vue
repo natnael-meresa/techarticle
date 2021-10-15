@@ -67,12 +67,12 @@ export default {
                   username: this.user.username,
                 })
                 .then((response) => {
-                    this.repns = response.data
+                    this.repns = response
                     this.$router.push({ name: "Home"})
                 })
                 .catch(err => {
                   console.log(`Etyrror: ${err}`);
-                  this.errors.push(err.response.data)
+                  this.errors.push(err.response)
                 });
 
             

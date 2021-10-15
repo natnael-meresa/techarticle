@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 
-let apiURl = 'http://localhost:8081/api/login'
+let apiURl = 'http://localhost:8081/api/auth/login'
 
 export default {
    
@@ -16,5 +16,14 @@ export default {
             alert(`erro:${error.response.data.msg}, and the response: `)
             return(error.response.data.msg)
         });
+    },
+    register(user){
+        axios.post('http://localhost:8081/api/auth/register', user).then((res) => {
+            console.log('registered')
+            console.log(`response: ${res}`)
+        }).catch(error => {
+            console.log(error.response)
+            return(error)
+        })
     }
-}
+} 

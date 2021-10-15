@@ -1,7 +1,7 @@
 <template>
     <main class="form-signin">
 
-        <form  @submit.prevent="Login" 
+        <form  @submit.prevent="Login">
             <img class="mb-4" src="/techarticlelogo.png" alt="" width="170" height="57">
             <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
             <div v-if="errors && errors.length">
