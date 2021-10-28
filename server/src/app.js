@@ -36,8 +36,15 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
+
+const ArticleController = require('../controllers/ArticleController');
+const Profile = require('../routes/profile');
+
+
 app.use('/api/auth', AuthController)
+app.use('/api/article', ArticleController)
 app.use("/api", require("../routes/index"))
+app.use("/api/profile", Profile)
 
 
 app.listen(process.env.PORT || 8081, () =>
