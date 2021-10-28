@@ -1,7 +1,6 @@
 const Post = require('../src/models/Article')
 const User = require('../src/models/User')
 const bcrypt = require("bcryptjs")
-const passport = require("passport")
 
 module.exports = class API {
     static async fetchAllArticle(req,res) {
