@@ -17,6 +17,7 @@ const Post = require('../src/models/Article')
 // let upload = multer({
 //     storage: storage,
 // }).single('image')
+
 router.post('/login', API.login)
 router.post('/register', API.register)
 router.get('/',API.fetchAllArticle)
