@@ -9,21 +9,22 @@
     <div class="postUser__name">
       <router-link
         :to="{ name: 'profile', params: { username: article.author.username } }"
-        class="author"
+        class="author link-list"
       >
         {{ article.author.username }}
       </router-link></div>
   </div>
   <div class="title">
-    <div class="title-content">
-      <h3>{{ article.title }}</h3>
-    <p>{{article.description}}</p>
-    </div>
+    <router-link :to="{ name: 'article-show', params: {slug: article.slug } }" class="preview-link">
+      <div class="title-content">
+        <h3>{{ article.title }}</h3>
+      <p>{{article.description}}</p>
+      </div>
+    </router-link>
     
     <div class="article-footer">
       <div class="postBody__date">
         <span class="date">{{ article.createdAt }}</span>
-        <TagList :tags="article.tagList" />
       </div>
       <div>
         <article-actions
@@ -44,7 +45,13 @@
       <span class="counter"> {{ article.favoritesCount }} </span>
     </button>
       </div>
+      
     </div>
+    <div class="readmore">
+           <div>Read more...</div>
+           <div><TagList :tags="article.tagList" /></div>
+           
+        </div>
   </div>
 </div>
 </div>
@@ -140,5 +147,14 @@ export default {
   .article-footer {
     display: flex;
     justify-content: space-between;
+  }
+  .readmore {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .link-list {
+       text-decoration: none;
+      
   }
 </style>

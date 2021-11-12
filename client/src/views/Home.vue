@@ -1,7 +1,7 @@
 <template>
   <div class="home">
-    <div class="heads p-4 p-md-5 mb-4 text-white" id="heads">
-      <div class="col-md-6 px-0 mx-auto">
+    <div v-if="!loggedIn"  class="heads  main-page p-4 p-md-5 mb-4 text-white" id="heads">
+      <div class="col-md-6 px-0 mx-auto" >
         <router-link to="/articles">Create Article</router-link>
         <router-link class="nav-link" active-class="active" exact to="/articles" >
                     creates
@@ -11,62 +11,97 @@
         <p class="lead mb-0"><a href="#" class="text-white fw-bold">Continue reading...</a></p>
       </div>
     </div>
-    <main class="container">
-      <div class="row g-5">
-        <div class="col-md-8">
-              <div class="feed-toggle">
-                <ul class="nav nav-tabs" id="myTab" role="tablist">
-                  <li v-if="isAuthenticated" class="nav-item" role="presentation">
-                      <router-link
-                        to="/home-my-feed"
-                        class="nav-link"
-                        id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="false"
-                        active-class="active"
-                      >
-                        Your Feed
-                      </router-link>
-                    </li>
-                    <li class="nav-item">
-                      <router-link
-                        to="/"
-                        exact
-                        class="nav-link"
-                        id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button" role="tab" aria-controls="home" aria-selected="true"
-                        active-class="active"
-                      >
-                        Global Feed
-                      </router-link>
-                    </li>
-
-                </ul>
-                <div class="tab-content" id="myTabContent">
-                  <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab"> Global Feed</div>
-                  <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">...</div>
-                </div>
-              </div>
+     <div class="container page">
+      <div class="row">
+        <div class="col-md-9">
+          <div class="feed-toggle">
+            <ul class="nav nav-pills outline-active">
+              <li v-if="loggedIn" class="nav-item">
+                <router-link
+                  :to="{ name: 'home-my-feed' }"
+                  class="nav-link"
+                  active-class="active"
+                >
+                  Your Feed
+                </router-link>
+              </li>
+              <li class="nav-item">
+                <router-link
+                  :to="{ name: 'Home' }"
+                  exact
+                  class="nav-link"
+                  active-class="active"
+                >
+                  Global Feed
+                </router-link>
+              </li>
+              <li class="nav-item" v-if="tag">
+                <router-link
+                  :to="{ name: 'home-tag', params: { tag } }"
+                  class="nav-link"
+                  active-class="active"
+                >
+                  <i class="ion-pound"></i> {{ tag }}
+                </router-link>
+              </li>
+            </ul>
+          </div>
+          <router-view></router-view>
         </div>
-
-        <div class="col-md-4">
-          <div class="position-sticky" style="top: 2rem;">
-            <h2>Popular Tags</h2>
+        <div class="col-md-3">
+          <div class="sidebar">
+            <p>Popular Tags</p>
+            <div class="tag-list">
+              <Tag v-for="(tag, index) in tags" :name="tag" :key="index">
+              </Tag>
+            </div>
           </div>
         </div>
       </div>
-    </main>
+    </div>   
+
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
 
+
+import { authComputed, Article, articlesCount, articles, isLoading, tags} from "../store/helpers.js"
+// import { FETCH_ARTICLE } from "../store/actions.type";
+import Tag from "@/components/Tag";
+import { FETCH_TAGS } from "@/store/actions.type";
 export default {
   name: 'Home',
+
+   computed: {
+    ...authComputed, ...Article, ...articlesCount, ...articles, ...isLoading, ...tags
+  },
+   mounted() {
+    this.$store.dispatch(FETCH_TAGS);
+  },
+  components : {
+    Tag,
+  },
+  // created() {
+  //   this.$store.dispatch(FETCH_ARTICLE, 'best-title-6tq2c2' );
+  //   this.$store
+  //       .dispatch("fetchArticles", {
+  //         articleSlug: 'best-title-6tq2c2',
+  //       })
+  // },
 }
 </script>
 
-<style>
+<style scoped>
+
   .heads{
     /* background: #33B5CC; */
     background: #0B4C58;
   }
+  .main-page{
+    background: url('../assets/home.jpg') no-repeat;
+    background-size: 100%;
+  }
 </style>
+

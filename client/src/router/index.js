@@ -1,14 +1,30 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
-import Home from '../views/Home.vue'
+// import Home from '../views/Home.vue'
 import Register from '@/views/Register'
 import Signin from '@/views/Signin'
 import Article from '@/views/Article'
 
 const routes = [
   {
-    path: '/',
-    name: 'Home',
-    component: Home
+    path: "/",
+    component: () => import("@/views/Home"),
+    children: [
+      {
+        path: "",
+        name: "Home",
+        component: () => import("@/views/HomeGlobal")
+      },
+      {
+        path: "my-feed",
+        name: "home-my-feed",
+        component: () => import("@/views/HomeMyFeed")
+      },
+      {
+        path: "tag/:tag",
+        name: "home-tag",
+        component: () => import("@/views/HomeTag")
+      }
+    ]
   },
   {
     path: '/about',
@@ -56,10 +72,26 @@ const routes = [
     component: Article,
   },
   {
+    path: '/article-create',
+    name: 'article-create',
+    component: Article,
+  },
+  {
     name: "article-edit",
     path: "/editor/:slug?",
     props: true,
     component: () => import("@/views/ArticleEdit")
+  },
+  {
+    name: "article-show",
+    path: "/article-show/:slug",
+    component: () => import("@/views/ArticleShow"),
+    props: true
+  },
+  {
+    name: "profile",
+    path: "/profile/@:username",
+    component: () => import("@/views/Profile")
   }
 ]
 

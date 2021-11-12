@@ -1,34 +1,36 @@
 <template>
     <div>
-        <div class="container">
-            <div class="create-article">
+        <div class="container pt-4">
+            <div class="create-article  container">
                <h1>Create Article</h1>
-               <form action="#" class="form-floating">
-                   <div class="form-floating">
-                        <input type="text" v-model="article.slug" class="form-control" id="slug" name="slug" placeholder="slug">
-                        <label for="floatingInput">Slug</label>
+               <form @submit.prevent="createArticle" class="form-floating">
+                   <div v-if="errors && errors.length">
+                        <div class="alert alert-warning" role="alert" v-for="(error, index) in errors" v-bind:key='index'>
+                            {{error}}
+                        </div>
                    </div>
-                   <div class="form-floating">
+                   <div class="form-floating pb-2">
                         <input type="text" v-model="article.title" class="form-control" id="title" name="title" placeholder="title">
                         <label for="floatingInput">Title</label>
                     </div>
-                    <div class="form-floating">
-                        <input type="text" v-model="article.body"  class="form-control" id="body" name="body" placeholder="body">
-                        <label for="floatingInput">Body</label>
-                    </div>
-                   <div class="form-floating">
+                     <div class="form-floating pb-2">
                          <input type="text" v-model="article.description"  class="form-control" id="description" name="description" placeholder="description">
                         <label for="floatingInput">Description</label>
                    </div>
-                   <div class="form-floating">
-                        <input type="text" v-model="article.author"  class="form-control" id="author" name="author" placeholder="author">
-                        <label for="floatingInput">Author</label>
+                    <div class=" pb-2">
+                       <textarea class="form-control" rows="8" v-model="article.body" placeholder="Write your article here">
+                       </textarea>
+                    
                     </div>
-                    <div class="form-floating">
+                  
+                    <div class="form-floating pb-2">
                         <input type="text" v-model="article.tagList"  class="form-control" id="tagList" name="tagList" placeholder="tagList">
                         <label for="floatingInput">tagList</label>
                     </div>
-                    <button class="w-100 btn btn-lg btn-primary" type="submit" v-on:click="createArticle">Create Article</button>
+                    <button  class="btn btn-lg pull-xs-right btn-primary" type="submit" >
+                        Create Article
+                    </button>
+                    <!-- <button class="w-100 btn btn-lg btn-primary" type="submit" v-on:click="createArticle">Create Article</button> -->
                </form>
             </div>
         </div>
@@ -36,35 +38,56 @@
 </template>
 
 <script>
-import ArticleService from '@/services/ArticleService'
 
 export default {
      data(){
         return {
             article: {
-                slug:undefined,
-                title:'senay kray',
+                title:null,
                 body:null,
                 description:null,
-                author:null,
                 tagList:null,
             },
-            repns: null
+            repns: null,
+            errors: []
         }
     },
         methods: {
         createArticle(){
-            console.log(this.article)
-            ArticleService.postArticles(this.article)
-            .then(response => {
-                this.repns = response.data
-            })
-            .catch(error => {
-                console.log(error)
-            })
+
+            
+            this.$store
+                .dispatch("createArticle", {
+                  title: this.article.title,
+                  body: this.article.body,
+                  description: this.article.description,
+                  tagList: this.article.tagList,
+                }).then(response => {
+                    this.repns = response
+                    console.log(`Response---${response}`)
+                    this.$router.push({
+                      name: 'Home'
+                    })
+                }).catch(err => {
+                    console.log(`erros: - ${err}`)
+                    this.errors = []
+                    this.errors.push(err.response.data)
+                })
+            
+            
         }
     }
 }
 </script>
 
+<style scoped>
+ .create-article{
+    width:70%;
+ }
+ button{
+  position: absolute;
+  right: 0;
+
+ }
+</style>
 
