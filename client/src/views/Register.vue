@@ -57,7 +57,7 @@ export default {
         }
     },
         methods: {
-        register(){
+        register(){ 
 
              this.$store
                 .dispatch("register", {

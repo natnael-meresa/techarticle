@@ -4,6 +4,7 @@ import router from './router'
 import store from './store'
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap";
+import "../public/css/all.css"
 import axios from 'axios'
 
 

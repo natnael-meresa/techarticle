@@ -2,7 +2,7 @@
   <div class="article-page">
     <div class="banner">
       <div class="container">
-
+        <h1>Title</h1>
         <h1 class="banner-h1"> {{article.title}}</h1>
           <div class="postUser">
             <div class="postUser__portrait">
@@ -71,7 +71,6 @@
 
 <script>
 import marked from "marked";
-import store from "@/store";
 import Comment from "@/components/Comment";
 import CommentEditor from "@/components/CommentEditor";
 import Tag from "@/components/Tag";
@@ -93,15 +92,13 @@ export default {
   },
    data() {
     return{
-      author: ''
     }
   },
   created() {
     Promise.all([
-      store.dispatch(FETCH_ARTICLE, this.slug),
-      store.dispatch(FETCH_COMMENTS, this.slug)
+      this.$store.dispatch(FETCH_ARTICLE, this.slug),
+      this.$store.dispatch(FETCH_COMMENTS, this.slug)
     ]).then(() => {
-      this.author = this.article.author.username
     }).catch((err)=>{
       console.log(err)
     });

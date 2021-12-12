@@ -90,8 +90,9 @@ const routes = [
   },
   {
     name: "profile",
-    path: "/profile/@:username",
-    component: () => import("@/views/Profile")
+    path: "/profile/@username",
+    component: () => import("@/views/Profile"),
+    props:true
   }
 ]
 

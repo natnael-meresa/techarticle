@@ -4,9 +4,15 @@ const cors = require('cors')
 const morgan = require('morgan')
 const session = require('express-session');
 const MongoStore = require('connect-mongo')
+const path = require('path')
+const dotenv = require('dotenv');
+const connectDB = require('../config/db')
 
 const passport = require('../config/passport')
 const AuthController = require('../controllers/AuthController');
+
+dotenv.config()
+connectDB()
 
 const app = express()
 app.use(express.json());
@@ -14,12 +20,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(morgan('combined'))
 app.use(cors())
 
-mongoose.connect('mongodb://localhost:27017/techarticle_db',{
-  useNewUrlParser: true,
-  useUnifiedTopology:true,
-  useFindAndModify: true,
-  useCreateIndex: true,
-}).then(()=> console.log("connected to the database!")).catch((err) => console.log(err));
+
 
 app.post('/register', (req,res) => {
     res.send({
@@ -45,6 +46,16 @@ app.use('/api/auth', AuthController)
 app.use('/api/article', ArticleController)
 app.use("/api", require("../routes/index"))
 app.use("/api/profile", Profile)
+
+
+
+app.use('/uploads', express.static(path.join(__dirname, '/uploads')))
+
+if(process.env.NODE_ENV === 'production' ){
+    app.use(express.static(path.join(__dirname, '/frontend/build')))
+
+    app.get('*', (req, res) => res.sendFile(path.resolve(__dirname, 'frontend', 'build', 'index.html')))
+}
 
 
 app.listen(process.env.PORT || 8081, () =>

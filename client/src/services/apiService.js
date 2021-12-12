@@ -6,7 +6,7 @@ const ApiService = {
       console.log(`error is here8989--> ${error}`)
       throw new Error(`[RWV] ApiService ${error}`);
     });
-  },
+  }, 
 
   get(resource, slug = "") {
     return axios.get(`${resource}/${slug}`).catch(error => {
@@ -80,14 +80,14 @@ export const CommentsService = {
   get(slug) {
     if (typeof slug !== "string") {
       throw new Error(
-        "[RWV] CommentsService.get() article slug required to fetch comments"
+        "article slug required to fetch comments"
       );
     }
-    return ApiService.get("//localhost:8081/api/article/articles", `${slug}/comments`);
+    return ApiService.get(`//localhost:8081/api/article/articles/${slug}/comments`);
   },
 
   post(slug, payload) {
-    return ApiService.post(`//localhost:8081/api/articles/${slug}/comments`, {
+    return ApiService.post(`//localhost:8081/api/article/articles/${slug}/comments`, {
       comment: { body: payload }
     });
   },
@@ -99,9 +99,9 @@ export const CommentsService = {
 
 export const FavoriteService = {
   add(slug) {
-    return ApiService.post(`//localhost:8081/api/articles/${slug}/favorite`);
+    return ApiService.post(`//localhost:8081/api/article/articles/${slug}/favorite`);
   },
   remove(slug) {
-    return ApiService.delete(`//localhost:8081/api/articles/${slug}/favorite`);
+    return ApiService.delete(`//localhost:8081/api/article/articles/${slug}/favorite`);
   }
 };

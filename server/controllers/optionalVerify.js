@@ -15,11 +15,14 @@ function OptionalToken(req, res, next) {
 	if(!token) {
         next()
     }else{
+
         jwt.verify(token, config.secret, function(err , decoded){
+
             if (err) return res.status(500).send({auth:false, message: 'Failed to authenticate token'});
+
             console.log(`decoded:- ${decoded.id}`)
             
-        req.userId = decoded.id;
+            req.userId = decoded.id;
     
     
         next()	

@@ -11,6 +11,7 @@
         :to="{ name: 'profile', params: { username: article.author.username } }"
         class="author link-list"
       >
+        {{article.author.username}}
         {{ article.author.username }}
       </router-link></div>
   </div>
@@ -41,8 +42,8 @@
         'btn-outline-primary': !article.favorited
       }"
     >
-      <i class="ion-heart"></i>
-      <span class="counter"> {{ article.favoritesCount }} </span>
+      <i class="fas fa-heart"> </i>
+      <span class="counter">{{ article.favoritesCount }} </span>
     </button>
       </div>
       
@@ -61,7 +62,8 @@
 <script>
 // import ArticleMeta from "./ArticleMeta";
 import TagList from "./TagList";
-
+import { authComputed, Article} from "../store/helpers.js"
+import { FAVORITE_ADD, FAVORITE_REMOVE } from "@/store/actions.type";
 export default {
   name: "ArticlePreview",
   components: {
@@ -79,6 +81,21 @@ export default {
           slug: this.article.slug
         }
       };
+    },
+        ...authComputed,
+    ...Article
+  },
+
+
+
+    methods: {
+    toggleFavorite() {
+      if (!this.loggedIn) {
+        this.$router.push({ name: "login" });
+        return;
+      }
+      const action = this.article.favorited ? FAVORITE_REMOVE : FAVORITE_ADD;
+      this.$store.dispatch(action, this.article.slug);
     }
   }
 };
@@ -87,7 +104,6 @@ export default {
 <style scoped>
 .post{
     box-shadow: rgba(0, 0, 0, 0.45) 0px 25px 20px -20px;
-
 }
 .postUser {
 
