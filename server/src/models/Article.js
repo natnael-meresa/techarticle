@@ -33,6 +33,30 @@ ArticleSchema.methods.slugify = function() {
   this.slug = slug(this.title) + '-' + (Math.random() * Math.pow(36, 6) | 0).toString(36);
 };
 
+ArticleSchema.methods.updateFavoriteCount = function() {
+  var article = this;
+
+  return User.count({favorites: {$in: [article._id]}}).then(function(count){
+    article.favoritesCount = count;
+
+    return article.save();
+  });
+};
+
+ArticleSchema.methods.toJSONFor = function(user){
+  return {
+    slug: this.slug,
+    title: this.title,
+    description: this.description,
+    body: this.body,
+    createdAt: this.createdAt,
+    updatedAt: this.updatedAt,
+    tagList: this.tagList,
+    favorited: user ? user.isFavorite(this._id) : false,
+    favoritesCount: this.favoritesCount,
+    author: this.author.toProfileJSONFor(user)
+  };
+};
  
 const Article = mongoose.model('Article', ArticleSchema);
 
