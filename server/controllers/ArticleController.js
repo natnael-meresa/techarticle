@@ -2,8 +2,34 @@ const express = require('express');
 const router = express.Router();
 const User = require('../src/models/User')
 const Article = require('../src/models/Article')
-
+const Comment = require('../src/models/Comment')
 const VerifyToken = require('./VerifyToken')
+const OptionalToken = require('./optionalVerify')
+
+// Preload article objects on routes with ':article'
+router.param('article', function(req, res, next, slug) {
+	Article.findOne({ slug: slug})
+	  .populate('author')
+	  .then(function (article) {
+		if (!article) { return res.sendStatus(404); }
+  
+		req.article = article;
+  
+		return next();
+	  }).catch(next);
+  });
+
+
+
+  router.param('comment', function(req, res, next, id) {
+	Comment.findById(id).then(function(comment){
+	  if(!comment) { return res.sendStatus(404); }
+  
+	  req.comment = comment;
+  
+	  return next();
+	}).catch(next);
+  });
 
 // Preload article objects on routes with ':article'
 // router.param('article', function(req, res, next, slug) {
@@ -67,7 +93,7 @@ router.post('/create', VerifyToken,  function(req, res, next) {
 
   })
 
-  router.get('/articles', function(req, res, next) {
+  router.get('/articles', OptionalToken, function(req, res, next) {
 	  console.log('hittedj oo------------------------------------------------dd')
 	var query = {};
 	var limit = 20;
@@ -110,13 +136,17 @@ router.post('/create', VerifyToken,  function(req, res, next) {
 		  .populate('author')
 		  .exec(),
 		Article.count(query).exec(),
+		req.userId ? User.findById(req.userId) : null,
 	  ]).then(function(results){
 		var articles = results[0];
 		var articlesCount = results[1];
+		var user = results[2];
 
+		console.log('@@@@@@@@@@@@@@@@@@@@@@@@2@edj oo------------------------------------------------dd')
+		console.log(user)
 		res.status(200).send({
 			articles: articles.map(function(article){
-			  return article
+				return article.toJSONFor(user);
 			}),
 			articlesCount: articlesCount
 		  });
@@ -199,5 +229,77 @@ router.post('/create', VerifyToken,  function(req, res, next) {
 	   console.log(`article inside article: ${article}`)
 	   res.status(200).send({article: article})
 	 }).catch(next);
+  });
+
+
+
+// Favorite an article
+router.post('/articles/:article/favorite', VerifyToken , function(req, res, next) {
+	var articleId = req.article._id;
+   
+	User.findById(req.userId).then(function(user){
+	  if (!user) { return res.sendStatus(401); }
+  
+	  return user.favorite(articleId).then(function(){
+		return req.article.updateFavoriteCount().then(function(article){
+		  return res.json({article: article.toJSONFor(user)});
+		});
+	  });
+	}).catch(next);
+  });
+  
+  // Unfavorite an article
+  router.delete('/articles/:article/favorite', VerifyToken , function(req, res, next) {
+	var articleId = req.article._id;
+  
+	User.findById(req.userId).then(function (user){
+	  if (!user) { return res.sendStatus(401); }
+  
+	  return user.unfavorite(articleId).then(function(){
+		return req.article.updateFavoriteCount().then(function(article){
+		  return res.json({article: article.toJSONFor(user)});
+		});
+	  });
+	}).catch(next);
+  });
+
+// return an article's comments
+router.get('/articles/:article/comments', OptionalToken, function(req, res, next){
+	Promise.resolve(req.userId ? User.findById(req.userId) : null).then(function(user){
+	  return req.article.populate({
+		path: 'comments',
+		populate: {
+		  path: 'author'
+		},
+		options: {
+		  sort: {
+			createdAt: 'desc'
+		  }
+		}
+	  }).execPopulate().then(function(article) {
+		return res.json({comments: req.article.comments.map(function(comment){
+		  return comment.toJSONFor(user);
+		})});
+	  });
+	}).catch(next);
+  });
+
+// create a new comment
+router.post('/articles/:article/comments', VerifyToken , function(req, res, next) {
+	User.findById(req.userId).then(function(user){
+	  if(!user){ return res.sendStatus(401); }
+  
+	  var comment = new Comment(req.body.comment);
+	  comment.article = req.article;
+	  comment.author = user;
+  
+	  return comment.save().then(function(){
+		req.article.comments.push(comment);
+  
+		return req.article.save().then(function(article) {
+		  res.json({comment: comment.toJSONFor(user)});
+		});
+	  });
+	}).catch(next);
   });
 module.exports = router
