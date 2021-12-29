@@ -45,8 +45,7 @@ const routes = [
     component: () => import("@/views/Settings")
   },
   {
-    // path: "/@:username",
-    path:"/username",
+    path: "/profile/:username",
     component: () => import("@/views/Profile"),
     children: [
       {
@@ -77,23 +76,19 @@ const routes = [
     component: Article,
   },
   {
-    name: "article-edit",
-    path: "/editor/:slug?",
-    props: true,
-    component: () => import("@/views/ArticleEdit")
-  },
-  {
+    path: "/article/:slug",
     name: "article-show",
-    path: "/article-show/:slug",
     component: () => import("@/views/ArticleShow"),
     props: true
   },
   {
-    name: "profile",
-    path: "/profile/@username",
-    component: () => import("@/views/Profile"),
-    props:true
-  }
+    path: "/editor/:slug?",
+    name: "article-edit",
+    props: true,
+    component: () => import("@/views/ArticleEdit")
+  },
+
+
 ]
 
 const router = createRouter({

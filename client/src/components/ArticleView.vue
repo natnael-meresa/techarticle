@@ -11,7 +11,6 @@
         :to="{ name: 'profile', params: { username: article.author.username } }"
         class="author link-list"
       >
-        {{article.author.username}}
         {{ article.author.username }}
       </router-link></div>
   </div>

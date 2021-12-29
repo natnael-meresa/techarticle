@@ -18,16 +18,17 @@ export const profile = {
     },
     actions: {
         [FETCH_PROFILE](context, payload) {
-            // const { username } = payload;
-            console.log(`username: ---- ${payload}`)
+          
             return ApiService.get("//localhost:8081/api/profile", payload)
               .then(({ data }) => {
                 context.commit(SET_PROFILE, data);
                 return data;
               })
-              .catch(() => {
+              .catch((err) => {
+
+                console.log(err)
                 // #todo SET_ERROR cannot work in multiple states
-                // context.commit(SET_ERROR, response.data.errors)
+                //context.commit(SET_ERROR, response.data.errors)
               });
           },
           [FETCH_PROFILE_FOLLOW](context, payload) {

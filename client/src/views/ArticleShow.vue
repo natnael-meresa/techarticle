@@ -9,12 +9,7 @@
               <span class="icon fa fa-user-circle-o"></span>
             </div>
             <div class="postUser__name">
-              <router-link
-                :to="{ name: 'profile', params: { username: article.author.username } }"
-                class="author link-list"
-              >
-                {{ article.author.username }}
-              </router-link>
+              <router-link :to="`/profile/${article.author.username}`"> {{ article.author.username }} </router-link>
             </div>
 
             <div class="btns" v-if="loggedIn">
