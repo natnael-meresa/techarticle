@@ -27,13 +27,7 @@ app.post('/register', (req,res) => {
         message: `Hello ${req.body.email}! welcome`
     });
 });
-app.use(session({
-      secret: "very secret",
-      resave: false,
-      saveUninitialized: true,
-      store: MongoStore.create({  mongoUrl:'mongodb://localhost:27017/techarticle_db' })
-    })
-);
+
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -48,7 +42,6 @@ app.use("/api", require("../routes/index"))
 app.use("/api/profile", Profile)
 
 
-app.use('/uploads', express.static(path.join(__dirname, '/uploads')))
 const root = process.cwd()
 console.log(root)
 if(process.env.NODE_ENV === 'production' ){
