@@ -48,14 +48,13 @@ app.use("/api", require("../routes/index"))
 app.use("/api/profile", Profile)
 
 
-
 app.use('/uploads', express.static(path.join(__dirname, '/uploads')))
-
-console.log(path.join(__dirname, '/client/dist'))
+console.log(__dirname)
+const root = process.cwd()
 if(process.env.NODE_ENV === 'production' ){
-    // app.use(express.static(path.join(__dirname, '/client/dist')))
-    app.use(express.static('../../client/dist'))
-    app.get('*', (req, res) => res.sendFile(path.resolve('../../client', 'dist', 'index.html')))
+    app.use(express.static(path.join(root, 'client/dist')))
+    // app.use(express.static('C:/Users/Natnael/OneDrive/Documents/Projects/techarticle/client/dist'))
+    app.get('*', (req, res) => res.sendFile(path.resolve(root, 'client', 'dist', 'index.html')))
 }
 
 
