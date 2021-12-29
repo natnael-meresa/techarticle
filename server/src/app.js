@@ -49,8 +49,8 @@ app.use("/api/profile", Profile)
 
 
 app.use('/uploads', express.static(path.join(__dirname, '/uploads')))
-console.log(__dirname)
 const root = process.cwd()
+console.log(root)
 if(process.env.NODE_ENV === 'production' ){
     app.use(express.static(path.join(root, 'client/dist')))
     // app.use(express.static('C:/Users/Natnael/OneDrive/Documents/Projects/techarticle/client/dist'))
