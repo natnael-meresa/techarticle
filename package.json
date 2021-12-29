@@ -6,7 +6,6 @@
   "scripts": {
     "start": "nodemon server/src/app.js",
     "lint": "./node_modules/.bin/eslint **/*.js",
-    "postinstall": "if test \"$NODE_ENV\" = \"production\" ; then npm run build --prefix client ; fi "
   },
   "keywords": [],
   "author": "",
