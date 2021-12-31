@@ -37,7 +37,7 @@ export default ApiService;
 
 export const TagsService = {
   get() {
-    return ApiService.get("//localhost:8081/api/tags");
+    return ApiService.get("/api/tags");
   }
 };
 
@@ -46,33 +46,33 @@ export const ArticlesService = {
     console.log(`error is here-000-> ${params}`)
     console.dir(params);
 
-    return ApiService.query("//localhost:8081/api/article/articles", {
+    return ApiService.query("/api/article/articles", {
       params: params
     });
   },
   queryByglobal(type, params) {
     console.log(`error is here-123-> ${params}`)
 
-    return ApiService.query("//localhost:8081/api/articles", {
+    return ApiService.query("/api/articles", {
       params: params
     });
   },
   queryByfavorite(type, params) {
-    return ApiService.query("//localhost:8081/api/articles" + (type === "feed" ? "/feed" : ""), {
+    return ApiService.query("/api/articles" + (type === "feed" ? "/feed" : ""), {
       params: params
     });
   },
   get(slug) {
-    return ApiService.get("//localhost:8081/api/article", slug);
+    return ApiService.get("/api/article", slug);
   },
   create(params) {
-    return ApiService.post("//localhost:8081/api/articles", { article: params });
+    return ApiService.post("/api/articles", { article: params });
   },
   update(slug, params) {
-    return ApiService.update("//localhost:8081/api/articles", slug, { article: params });
+    return ApiService.update("/api/articles", slug, { article: params });
   },
   destroy(slug) {
-    return ApiService.delete(`//localhost:8081/api/articles/${slug}`);
+    return ApiService.delete(`/api/articles/${slug}`);
   }
 };
 
@@ -83,25 +83,25 @@ export const CommentsService = {
         "article slug required to fetch comments"
       );
     }
-    return ApiService.get(`//localhost:8081/api/article/articles/${slug}/comments`);
+    return ApiService.get(`/api/article/articles/${slug}/comments`);
   },
 
   post(slug, payload) {
-    return ApiService.post(`//localhost:8081/api/article/articles/${slug}/comments`, {
+    return ApiService.post(`/api/article/articles/${slug}/comments`, {
       comment: { body: payload }
     });
   },
 
   destroy(slug, commentId) {
-    return ApiService.delete(`//localhost:8081/api/articles/${slug}/comments/${commentId}`);
+    return ApiService.delete(`/api/articles/${slug}/comments/${commentId}`);
   }
 };
 
 export const FavoriteService = {
   add(slug) {
-    return ApiService.post(`//localhost:8081/api/article/articles/${slug}/favorite`);
+    return ApiService.post(`/api/article/articles/${slug}/favorite`);
   },
   remove(slug) {
-    return ApiService.delete(`//localhost:8081/api/article/articles/${slug}/favorite`);
+    return ApiService.delete(`/api/article/articles/${slug}/favorite`);
   }
 };

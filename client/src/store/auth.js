@@ -24,14 +24,14 @@ export const moduleA = {
 
     actions: {
         register({commit}, credentials) {
-          return axios.post('//localhost:8081/api/auth/register', credentials).then(({ data }) => {
+          return axios.post('/api/auth/register', credentials).then(({ data }) => {
             console.log(`${data}`)
             commit('SET_USER_DATA', data)
           })
         },
 
         login({commit}, credentials) {
-          return axios.post('//localhost:8081/api/auth/login', credentials).then(({data}) => {
+          return axios.post('/api/auth/login', credentials).then(({data}) => {
             commit('SET_USER_DATA', data)
           })
         },
@@ -39,7 +39,7 @@ export const moduleA = {
           commit('CLEAR_USER_DATA')
         },
         createArticle( {commit}, credentials) {
-          return axios.post('//localhost:8081/api/article/create', credentials).then(({data}) => {
+          return axios.post('/api/article/create', credentials).then(({data}) => {
             console.log(`${data}`)
             console.log(commit)
           })

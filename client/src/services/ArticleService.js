@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 const apiClient = axios.create({
-    baseURL: 'localhost:8081/api',
+    baseURL: '/api',
     withCredentials:false,
     headers: {
         Accept: 'application/json',
@@ -9,7 +9,7 @@ const apiClient = axios.create({
     }
 })
 
-let apiURl = 'http://localhost:8081/api'
+let apiURl = '/api'
 
 export default {
    

@@ -19,7 +19,7 @@ export const profile = {
     actions: {
         [FETCH_PROFILE](context, payload) {
           
-            return ApiService.get("//localhost:8081/api/profile", payload)
+            return ApiService.get("/api/profile", payload)
               .then(({ data }) => {
                 context.commit(SET_PROFILE, data);
                 return data;
@@ -33,7 +33,7 @@ export const profile = {
           },
           [FETCH_PROFILE_FOLLOW](context, payload) {
             const { username } = payload;
-            return ApiService.post(`//localhost:8081/api/profile/${username}/follow`)
+            return ApiService.post(`/api/profile/${username}/follow`)
               .then(({ data }) => {
                 context.commit(SET_PROFILE, data.profile);
                 return data;
@@ -45,7 +45,7 @@ export const profile = {
           },
           [FETCH_PROFILE_UNFOLLOW](context, payload) {
             const { username } = payload;
-            return ApiService.delete(`//localhost:8081/api/profile/${username}/follow`)
+            return ApiService.delete(`/api/profile/${username}/follow`)
               .then(({ data }) => {
                 context.commit(SET_PROFILE, data.profile);
                 return data;
